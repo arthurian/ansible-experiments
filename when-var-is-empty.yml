@@ -1,0 +1,15 @@
+---
+# Tests a conditional for finding the empty variable. 
+- hosts:
+  - local
+  handlers:
+  vars:
+    empty: ""
+    full: "filled with stuff and junk"
+
+  roles:
+  tasks:
+     - name: test empty var
+       debug: 
+         msg: "variable, empty is empty {{empty}}"
+       when: empty == ""
