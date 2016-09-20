@@ -5,11 +5,20 @@
   handlers:
   vars:
     empty: ""
-    full: "filled with stuff and junk"
+    filled: "filled with stuff and junk"
 
   roles:
   tasks:
-     - name: test empty var
+     - name: runs when 'empty' == '' variable
        debug: 
-         msg: "variable, empty is empty {{empty}}"
+         msg: "variable, empty is empty"
        when: empty == ""
+
+     - name:  runs when 'empty' variable has data (should be skipped)
+       debug: 
+         msg: "variable, empty is empty"
+       when: empty != ""
+     - name: test for non empty variable
+       debug:
+         msg: "variable, filled is not empty"
+       when: filled != ""
