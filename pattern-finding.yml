@@ -18,4 +18,4 @@
         created_folder: "{{ file_name.split('.') | first }}"
     - name: regex replace test
       set_fact:
-        regex_replace: "{{ url | regex_replace('^(.*\/)(.*)\..*$', '\\2') }}"
+        regex_replace: "{{ url | regex_replace('^(.*\\/)(.*)\\..*$', '\\2') }}"
