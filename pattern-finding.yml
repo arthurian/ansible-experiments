@@ -5,7 +5,7 @@
   - local
   handlers:
   vars:
-    url: "http://www.example.com/foo/bar.zip"
+    url: "http://www.example.com/foo/bar.2.0.zip"
     git_repo: "filled with stuff and junk"
 
   roles:
@@ -13,6 +13,9 @@
     - name: extract file name from url
       set_fact:
         file_name: "{{ url.split('/') | last }}"
-    - name: print just the file name from a url
+    - name: print just the file name from a url (broken do to multiple dots)
       set_fact:
         created_folder: "{{ file_name.split('.') | first }}"
+    - name: regex replace test
+      set_fact:
+        regex_replace: "{{ url | regex_replace('^(.*\/)(.*)\..*$', '\\2') }}"
