@@ -25,7 +25,6 @@
     - name: what was registered
       debug:
         var: unarchived
-
-#   - name: regex replace test
-#     set_fact:
-#       regex_replace: "{{ url | regex_replace('^(.*\\/)(.*)\\..*$', '\\2') }}"
+    - name:  just the folder name
+      debug:
+        var: unarchived.files[0]
