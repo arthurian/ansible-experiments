@@ -7,7 +7,7 @@
   vars:
     zip_archive: "assets/ansible-experiments.zip"
     tar_archive: "assets/ansible-experiments.tar.gz"
-    dest: "/private/tmp/experiment/"
+    dest: "./changes"
 
   roles:
   tasks:
@@ -18,8 +18,9 @@
     - name: unarchive file
       unarchive:
         src: "{{ zip_archive }}"
-        dest: "{{ dest }}"
+        dest: "{{ dest }}/"
         copy: no
+        list_files: true
       register: unarchived
     - name: what was registered
       debug:
