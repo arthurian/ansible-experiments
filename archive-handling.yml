@@ -1,0 +1,30 @@
+---
+# Tests a string finding
+#  run with `ansible-playbook -c local archive-handling.yml -v`
+- hosts:
+  - local
+  handlers:
+  vars:
+    zip_archive: "assets/ansible-experiments.zip"
+    tar_archive: "assets/ansible-experiments.tar.gz"
+    dest: "/private/tmp/experiment/"
+
+  roles:
+  tasks:
+    - name: creating dir for experiment
+      file:
+        state: directory
+        path: "{{ dest }}"
+    - name: unarchive file
+      unarchive:
+        src: "{{ zip_archive }}"
+        dest: "{{ dest }}"
+        copy: no
+      register: unarchived
+    - name: what was registered
+      debug:
+        var: unarchived
+
+#   - name: regex replace test
+#     set_fact:
+#       regex_replace: "{{ url | regex_replace('^(.*\\/)(.*)\\..*$', '\\2') }}"
