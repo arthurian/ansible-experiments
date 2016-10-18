@@ -19,3 +19,15 @@
     - name: regex replace test
       set_fact:
         regex_replace: "{{ url | regex_replace('^(.*\\/)(.*)\\..*$', '\\2') }}"
+
+# file uncommenting
+    - name: copy example file into /tmp to test
+      synchronize:
+        src: ./assets/commented-ini.ini
+        dest: /tmp/commented-ini.ini
+      delegate_to: "{{ inventory_hostname }}"
+    - name: uncomment lines
+      replace:
+         dest: /tmp/commented-ini.ini
+         regexp: ; (storage\.adapter( |Options\.(access|secret|bucket)))
+         replace: \1
