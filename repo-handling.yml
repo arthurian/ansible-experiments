@@ -1,0 +1,33 @@
+---
+# Tests a string finding
+#  run with `ansible-playbook -c local reoo-handling.yml -v`
+- hosts:
+  - local
+  handlers:
+  vars:
+    repo_url: "https://github.com/sanguis/.vim.git"
+    dest: "changes"
+
+  roles:
+  tasks:
+  - name: set get name of the repo it self without the rest of the URL.
+    set_fact:
+      repo: "{{ repo_url | regex_replace('^(.*\\/)(.*).*$', '\\2') }}"
+  - name: getting rid of the .git
+    set_fact:
+      name: "{{ repo | regex_replace('(^.*)(\\.git)', '\\1') }}"
+    when: repo | search('git')
+  - name: Repo with hard dest
+    git: 
+      dest: "{{ dest}}/{{ repo }}"
+      repo: "{{ repo_url }}"
+      update: yes
+    ignore_errors: yes
+    when: repo_url | search('git')
+  - name: Repo with relitive dest
+    git: 
+      dest: "{{ dest}}/{{ name }}"
+      repo: "{{ repo_url }}"
+      update: yes
+    ignore_errors: yes
+    when: repo_url | search('git')

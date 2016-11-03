@@ -6,7 +6,8 @@
   handlers:
   vars:
     url: "http://www.example.com/foo/bar.2.0.zip"
-    git_repo: "filled with stuff and junk"
+    string: "filled with stuff and junk"
+    repo: "https://github.com/jaguillette/hvd-dh-omeka-theme.git"
 
   roles:
   tasks:
@@ -31,3 +32,13 @@
          dest: /tmp/commented-ini.ini
          regexp: ; (storage\.adapter( |Options\.(access|secret|bucket)))
          replace: \1
+# sring fliters
+    - name: check for git in repo
+      debug:
+        msg: its a git repo.
+      when: repo | search(".git")
+    - name: check for git in repo
+      debug:
+        msg: not a repo this should break
+      ignore_errors: yes
+      when: url | search(".git")
