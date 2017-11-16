@@ -1,0 +1,41 @@
+---
+# Run with: ansible-playbook -c local omeka-plugin-handling.yml
+- hosts:
+  - local
+  vars:
+    asset:
+      type: "plugin"
+      url: "https://github.com/scholarslab/NeatlineFeatures/archive/2.0.5.zip"
+      file_extension: "zip"
+      id: "123"
+    asset_cache: omeka/plugins
+  tasks:
+    - name: ensure cache dir exists
+      file:
+        state: directory
+        path: "./{{ asset_cache }}"
+
+    - name: download plugin
+      get_url:
+        url: "{{ asset.url }}"
+        dest: "{{ asset_cache }}/{{ asset.id }}.{{ asset.file_extension }}"
+
+    - name: unzip plugin
+      shell: "unzip -o {{ asset_cache }}/{{ asset.id }}.{{ asset.file_extension }} -d {{ asset_cache }}/{{ asset.id }}"
+      register: unzip_result
+      failed_when: "unzip_result.rc > 1"
+
+    - name: find plugin file
+      find:
+        path: "{{ asset_cache }}/{{ asset.id }}/"
+        recurse: yes
+        file_type: file
+        patterns: '^(?:[A-Z][a-z]*)+Plugin.php$'
+        use_regex: yes
+      register: asset_find_result
+
+    - debug:
+        var: asset_find_result
+
+    - debug:
+        msg: "{{ asset_find_result.files[0].path | basename | regex_replace('^(.+)Plugin.php$', '\\1') }}"
