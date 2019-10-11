@@ -1,0 +1,18 @@
+---
+# Tests a conditional for finding the empty variable. 
+#  run with `ansible-playbook -c local regexreplace1.yml -v`
+- hosts:
+  - local
+  tasks:
+     - name: master should yield master
+       debug: 
+         msg: "{{ 'master' | regex_replace('[^a-zA-Z0-9]', '') }}"
+     - name: dev-branch-foo should yield devbranchfoo
+       debug: 
+         msg: "{{ 'dev-artie' | regex_replace('[^a-zA-Z0-9]', '') }}"
+     - name: feature/task/bar should yield featuretaskbar
+       debug: 
+         msg: "{{ 'feature/task/bar' | regex_replace('[^a-zA-Z0-9]', '') }}"
+     - name: bugfix_atgu123 should yield bugfixatgu123
+       debug: 
+         msg: "{{ 'bugfix_atgu123' | regex_replace('[^a-zA-Z0-9]', '') }}"
